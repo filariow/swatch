@@ -14,5 +14,5 @@ if you want to use a custom name for the kind cluster, pass it as argument to th
 $ ./run.sh CLUSTER_NAME
 ```
 
-> The kind cluster won't be delete automatically
+> The kind cluster won't be deleted automatically
 
