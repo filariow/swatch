@@ -1,0 +1,37 @@
+apiVersion: skaffold/v2beta12
+kind: Config
+metadata:
+  name: swatch
+
+build:
+  artifacts:
+  - image: my.cr/swatch
+    context: .
+    sync:
+      manual:
+        - src: "*.go"
+          dest: "/app"
+        - src: "go.*"
+          dest: "/app"
+  local:
+    useBuildkit: true
+    concurrency: 0
+deploy:
+  statusCheckDeadlineSeconds: 60
+  helm:
+    flags:
+      install: ["--timeout", "1m"]
+      upgrade: ["--timeout", "1m"]
+    releases:
+      - name: swatch
+        chartPath: ./helm/swatch
+        valuesFiles:
+          - ./helm/swatch/values.yaml
+        artifactOverrides:
+          image: my.cr/swatch
+        namespace: swatch
+        recreatePods: false
+        createNamespace: true
+        wait: false
+        skipBuildDependencies: false
+        upgradeOnChange: true
